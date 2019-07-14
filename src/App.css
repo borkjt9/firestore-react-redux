@@ -23,6 +23,10 @@
   color: #61dafb;
 }
 
+.error-text {
+  color: red;
+}
+
 .firestore-response-btn {
   background-color: green;
   border-color: darkgreen;

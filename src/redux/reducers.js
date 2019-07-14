@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import AnswerReducer from './reducers/answer-reducer';
+
 /**
  * Think of appReducer as the 'master' reducer
  * It combines each of our individual reducers, like 'answer-reducer',
@@ -8,7 +9,6 @@ import AnswerReducer from './reducers/answer-reducer';
 const appReducer = combineReducers({
   answerDetail: AnswerReducer
 });
-
 
 /** rootReducer
  * @param  {Object} state Current redux state

@@ -7,3 +7,5 @@ export const FETCH_ANSWER = 'FETCH_ANSWER';
 export const STATUS_PENDING = 'STATUS_PENDING';
 export const STATUS_ERROR = 'STATUS_ERROR';
 export const STATUS_SUCCESS = 'STATUS_SUCCESS';
+
+export const COLLECTION_QUESTIONS = 'questions';

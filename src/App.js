@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import fetchAnswer from './redux/actions/fetch-answer';
+import fetchAnswer from './firestore/answers';
 import { STATUS_ERROR } from './constants';
 import logo from './logo.svg';
 import './App.css';
@@ -21,17 +21,35 @@ function renderError(msg) {
 }
 class App extends Component {
 
-  /**
+   /**
    * Creates an instance of App
-   * The class currently only references one question, which is set to activeQuestion.
    */
   constructor() {
     super();
+    // The application currently only uses one question.
+    // If we were to add additional questions, we could store which was is active here.
     this.activeQuestion = 'hello-firestore';
+    // We have added a state to store the response from Firestore
+    this.state = {
+      firestoreResponse: 'N/A'
+    };
+    this.makeFirestoreRequest = this.makeFirestoreRequest.bind(this);
+  }
+
+  /**
+   * Kicks off request to Firestore
+   * @param  {String} activeQuestion the documentID to query in Firestore
+   */
+  makeFirestoreRequest(activeQuestion) {
+    fetchAnswer(activeQuestion).then((response) => {
+      this.setState({
+        firestoreResponse: response,
+      })
+    });
   }
   render() {
-    const { answerDetail, dispatch } = this.props;
-    const { response, status, error } = answerDetail
+    const { firestoreResponse } = this.state;
+    const { activeQuestion} = this;
     return (
       <div className="App">
         <header className="App-header">
@@ -41,22 +59,20 @@ class App extends Component {
           </p>
             <button
               className="firestore-response-btn"
-              onClick={() => dispatch(fetchAnswer())}
+              onClick={() => this.makeFirestoreRequest(activeQuestion)}
             >
               <p>
                 Get Firestore Answer
               </p>
             </button>
             <p className="firestore-response-text">
-              {`Firestore says: '${response}'`}
+              {`Firestore says: '${firestoreResponse}'`}
             </p>
-            { status === STATUS_ERROR && renderError(error.message)}
         </header>
       </div>
     );
   }
 }
-
 
 /**
  * mapStateToProps/

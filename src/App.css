@@ -23,6 +23,22 @@
   color: #61dafb;
 }
 
+.error-text {
+  color: red;
+}
+
+.firestore-response-btn {
+  background-color: green;
+  border-color: darkgreen;
+  color: white;
+  border-radius: 4px;
+}
+
+.firestore-response-btn:hover {
+  background-color: darkgreen;
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -1,25 +1,33 @@
 import FirestoreDB from './config';
 import { COLLECTION_QUESTIONS } from '../constants'
+import {
+  fetchAnswerStart,
+  fetchAnswerFulfilled,
+  fetchAnswerErrored,
+} from '../redux/actions/fetch-answer';
 
 /**
  * fetchAnswer - makes requests to Firestore
  *
- * @param  {String} question
- * @return {Promise}      response from Firestore db
+ * @param  {Function} dispatch Redux function dispatch
+ * @param  {String} question the name of the document we are querying
+ * @return {any}      feeds into reducer
  */
-function fetchAnswer(question) {
+export default function fetchAnswer(dispatch, question) {
+  dispatch(fetchAnswerStart());
   // Calls to Firestore return a promise.
   // If no document exists, the promise will still resolve.
-  return FirestoreDB().collection(COLLECTION_QUESTIONS).doc(question).get()
+  FirestoreDB().collection('questions').doc(question).get()
     .then((doc) => {
       if (doc.exists) {
         const { response } = doc.data();
-        return response;
+        dispatch(fetchAnswerFulfilled(response));
       } else {
         throw new Error('No Such Document');
       }
     })
-    .catch(error => error);
+    .catch((error) => {
+      // List of Firestore errors: https://firebase.google.com/docs/storage/web/handle-errors
+      dispatch(fetchAnswerErrored(error));
+    });
 }
-
-export default fetchAnswer;

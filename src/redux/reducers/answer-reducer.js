@@ -1,6 +1,8 @@
 // Use constants to reduce fat finger bugs.
 import {
-  FETCH_ANSWER
+  FETCH_ANSWER_START,
+  FETCH_ANSWER_FULFILLED,
+  FETCH_ANSWER_ERRORED,
 } from '../../constants';
 
 /**
@@ -16,8 +18,12 @@ export default function (
   }, action
 ) {
   switch (action.type) {
-    case FETCH_ANSWER:
-      return { ...state, ...{response: action.payload} }
+    case FETCH_ANSWER_START:
+    case FETCH_ANSWER_FULFILLED:
+    case FETCH_ANSWER_ERRORED:
+      // es6 destructuring uses elipses to transform objects into key-value pairs
+      // any key-value pair in the action's payload will be assigned to the state
+      return { ...state, ...action.payload }
     default:
       return state;
   }

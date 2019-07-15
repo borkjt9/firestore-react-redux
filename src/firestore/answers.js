@@ -17,7 +17,7 @@ export default function fetchAnswer(dispatch, question) {
   dispatch(fetchAnswerStart());
   // Calls to Firestore return a promise.
   // If no document exists, the promise will still resolve.
-  FirestoreDB().collection('questions').doc(question).get()
+  FirestoreDB().collection(COLLECTION_QUESTIONS).doc(question).get()
     .then((doc) => {
       if (doc.exists) {
         const { response } = doc.data();

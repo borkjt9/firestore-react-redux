@@ -30,9 +30,6 @@ class App extends Component {
     // If we were to add additional questions, we could store which was is active here.
     this.activeQuestion = 'hello-firestore';
     // We have added a state to store the response from Firestore
-    this.state = {
-      firestoreResponse: 'N/A'
-    };
     this.makeFirestoreRequest = this.makeFirestoreRequest.bind(this);
   }
 
@@ -41,33 +38,33 @@ class App extends Component {
    * @param  {String} activeQuestion the documentID to query in Firestore
    */
   makeFirestoreRequest(activeQuestion) {
-    fetchAnswer(activeQuestion).then((response) => {
-      this.setState({
-        firestoreResponse: response,
-      })
-    });
+    const { dispatch } = this.props;
+    fetchAnswer(dispatch, activeQuestion);
   }
+
   render() {
-    const { firestoreResponse } = this.state;
-    const { activeQuestion} = this;
+    const { activeQuestion } = this;
+    const { answerDetail } = this.props;
+    const { response, status, error } = answerDetail
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p className="hello-firestore-question">
+          <p className="firestore-question">
             Hello Firestore! How are you?
           </p>
-            <button
-              className="firestore-response-btn"
-              onClick={() => this.makeFirestoreRequest(activeQuestion)}
-            >
-              <p>
-                Get Firestore Answer
-              </p>
-            </button>
-            <p className="firestore-response-text">
-              {`Firestore says: '${firestoreResponse}'`}
+          <button
+            className="firestore-response-btn"
+            onClick={() => this.makeFirestoreRequest(activeQuestion)}
+          >
+            <p>
+              Get Firestore Answer
             </p>
+          </button>
+          <p className="firestore-response-text">
+            {`Firestore says: '${response}'`}
+          </p>
+          { status === STATUS_ERROR && renderError(error.message)}
         </header>
       </div>
     );
